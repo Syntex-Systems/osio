@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSIO - Web-Based Operating System</title>
+    <link href="https://fonts.cdnfonts.com/css/product-sans" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Product Sans';
+            user-select: none;
+        }
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: linear-gradient(45deg, #f5f5f7, #e8e8e8);
+            color: #1d1d1f;
+            line-height: 1.6;
+            overflow-x: hidden;
+
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            padding: 1rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--glass-border);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-family: 'Product Sans';
+            font-weight: bold;
+            color: #0066cc;
+            text-shadow: 0 0 10px rgba(0, 102, 204, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); }
+            50% { text-shadow: 0 0 20px rgba(0, 102, 204, 0.5); }
+            100% { text-shadow: 0 0 10px rgba(0, 102, 204, 0.3); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1d1d1f;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #0066cc;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            margin-top: 70px;
+            perspective: 1000px;
+        }
+
+        section {
+            padding: 4rem 1rem;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 8rem 1rem;
+            background: linear-gradient(135deg, #003dcc, #5856d6);
+            width: 100vw;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 4s infinite;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeUp 0.8s ease;
+        }
+
+        @keyframes fadeUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .developer-story {
+            background: var(--glass-bg);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .developer-story:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .developer-story h3 {
+            color: #0066cc;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .developer-story h3::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            bottom: -5px;
+            left: 25%;
+            background: #0066cc;
+            transition: width 0.3s ease;
+        }
+
+        .developer-story:hover h3::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 10px;
+            width: 150px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 100px;
+            margin-top: 2rem;
+            transition: all 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .cta-button:hover {
+            width: 200px;
+            background: rgba(51, 51, 51, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu {
+            display: none;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+
+            img{
+                width: 25px;
+                height: 25px;
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: var(--card-shadow);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Rest of the HTML remains the same -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">OSIO</div>
+            <button class="menu"><img src="https://img.icons8.com/fluency-systems-regular/45/000/menu--v1.png"></button>
+            <div class="nav-links">
+                <a href="#introduction">Introduction</a>
+                <a href="#about">About</a>
+                <a href="#developers">Developers</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to OSIO</h1>
+            <p>Experience the future of web-based operating systems</p>
+            <a href="#about" class="cta-button">Learn More</a>
+        </section>
+
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Efficient Multitasking</h3>
+                    <p>Seamlessly manage multiple applications with OSIO's innovative window management system, designed for productivity and ease of use.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Modern Interface</h3>
+                    <p>Experience a sleek and intuitive design that combines the best aspects of desktop and web interfaces for a superior user experience.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Cross-Platform</h3>
+                    <p>Access your operating system from any device with a web browser, ensuring your workspace is always available wherever you go.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2>About OSIO</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>CORE Technology</h3>
+                    <p>Powered by our Central Operating Runtime Environment (CORE), OSIO delivers smooth performance and reliable operation across all devices.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>iframe Architecture</h3>
+                    <p>Applications run in secure, isolated environments using iframe technology, ensuring stability and security while maintaining seamless integration.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Web-Native Design</h3>
+                    <p>Built using modern web technologies, OSIO combines the power of the web with the functionality of traditional operating systems.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="developers">
+            <h2>Meet the Developer</h2>
+            <div class="developer-story">
+                <h3>The Story Behind OSIO</h3>
+                <p>
+                    Kave Amrollahi is the passionate and visionary developer behind OSIO. What started as a fun personal project to simulate operating systems for his own use quickly evolved into something much bigger. Kave's curiosity about technology and multitasking led him to design a system that seamlessly integrates web-based applications, offering a sleek and efficient user experience.
+                </p>
+                <p>
+                    Driven by the desire to push the boundaries of traditional OS design, Kave has transformed OSIO into a unique platform that blends creativity with functionality, all while keeping the experience fun and accessible for users and developers alike.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Same JavaScript as before
+        const menu = document.querySelector('.menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        menu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+    </script>
+</body>
+</html>
